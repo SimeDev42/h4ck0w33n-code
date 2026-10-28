@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Wake up your lamp · H4CK-O-W33N</title>
+    <meta
+      name="description"
+      content="Describe the lantern you built and give it a personality — then chat with it." />
+    <meta name="theme-color" content="#251a35" />
+    <link rel="icon" href="https://iamsi.me/h4ck0w33n/favicon.svg?v=1" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Micro+5&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="lamp.css?v=9" />
+  </head>
+  <body>
+    <div class="ambient" aria-hidden="true">
+      <div class="glow glow-a"></div>
+      <div class="glow glow-b"></div>
+      <div class="embers"></div>
+      <div class="embers embers-2"></div>
+    </div>
+
+    <div class="wrap">
+
+      <nav class="topbar" aria-label="Event"><a class="brand" href="https://iamsi.me/h4ck0w33n/">H4CK-O-W33N</a><span>Hacktoberfest 2026 · Vejle, DK</span></nav>
+      <header class="page-head">
+        <h1>Wake up<br />your lamp.</h1>
+        <p>
+          Describe the object you built and the personality you want it to have.
+          Then talk to it — it answers in character.
+        </p>
+      </header>
+
+      <main class="workspace">
+        <div class="creation-panel">
+      <form id="setup" class="setup" autocomplete="off">
+        <div class="panel-heading"><span class="panel-number" aria-hidden="true">01</span><div><h2>Give it a personality</h2><p>Start with an idea. Make it your own.</p></div></div>
+        <label class="field">
+          <span class="label">What did you make?</span>
+          <textarea
+            id="object"
+            rows="3"
+            placeholder="A lantern laser-cut from plywood, with a flickering orange LED and a little brass switch."></textarea>
+        </label>
+        <label class="field">
+          <span class="label">Its personality</span>
+          <textarea
+            id="personality"
+            rows="3"
+            placeholder="A grumpy old lighthouse keeper who loves terrible puns and complains about the draft."></textarea>
+        </label>
+        <div class="presets">
+          <span class="presets-label">Need ideas? Pick a starter</span>
+          <div class="preset-list" id="presets"></div>
+        </div>
+        <button class="cta" type="submit">Wake it up</button>
+      </form>
+
+      <section id="chat" class="chat" aria-label="Chat with your lamp" hidden>
+        <div class="panel-heading"><span class="panel-number" aria-hidden="true">01</span><div><h2>Your lamp is awake</h2><p>Say hello to your creation.</p></div></div>
+        <div id="log" class="chat-log" aria-live="polite"></div>
+        <form id="composer" class="composer" autocomplete="off">
+          <label class="sr-only" for="message">Your message</label>
+          <input
+            enterkeyhint="send"
+            id="message"
+            type="text"
+            placeholder="Say something to your lamp…" />
+          <button id="send" class="cta" type="submit">Send</button>
+        </form>
+        <button id="reset" class="link-btn" type="button">Start over</button>
+      </section>
+        </div>
+        <aside class="settings-panel" aria-labelledby="settings-title">
+          <div class="panel-heading"><span class="panel-number" aria-hidden="true">02</span><div><h2 id="settings-title">Connect &amp; speak</h2><p>Set up your model, light and voice.</p></div></div>
+      <div class="server-box" id="server-box">
+        <div class="model-row server-row">
+          <label for="server">Server</label>
+          <input
+            id="server"
+            type="text"
+            placeholder="localhost:11434"
+            autocomplete="off"
+            spellcheck="false"
+            aria-describedby="server-hint" />
+        </div>
+        <p class="server-status" id="server-status" aria-live="polite"></p>
+        <details class="connection-help"><summary>Server address help</summary>
+      <p class="server-hint" id="server-hint">
+          Where the model runs. Type an IP address
+          (<code>192.168.1.24</code> &rarr; port 11434, path
+          <code>/v1</code>), or be specific
+          (<code>192.168.1.24:8000/v1</code>, <code>http://&hellip;</code>).
+          Blank means localhost. Saved in this browser.
+        </p>
+      </details>
+      </div>
+
+      <div class="model-row serial-row">
+        <label for="serial-connect">USB light</label>
+        <button
+          type="button"
+          id="serial-connect"
+          class="preview-btn"
+          title="Connect the ESP32 that drives the lantern"
+          aria-describedby="serial-status">
+          Connect
+        </button>
+        <button
+          type="button"
+          id="serial-test"
+          class="preview-btn"
+          title="Flash the lamp on and off to check the wiring works"
+          aria-describedby="serial-status"
+          disabled>
+          Test light
+        </button>
+      </div>
+      <p class="server-status" id="serial-status" aria-live="polite"></p>
+      <details class="connection-help"><summary>How to connect your light</summary>
+      <p class="server-hint" id="serial-hint">
+        Plug the ESP32 into this computer, click Connect, pick it in the browser
+        dialog, then use Test light. If restarting the board drops the
+        connection, reconnect in the browser. The page sends one byte at
+        <code>115200</code> baud &mdash; <code>1</code> as the lamp starts
+        talking, then <code>0</code>/<code>1</code> flickering with the voice,
+        and <code>0</code> when it stops. Connect mid-chat and it picks up right
+        away (<code>t</code> tests the light). Use desktop Chrome or Edge on
+        <code>http://localhost</code> or HTTPS. Plain HTTP on a LAN IP does not
+        provide the secure context required for USB access.
+      </p>
+      </details>
+
+      <div class="model-row" id="model-row">
+        <label for="model">Model</label>
+        <select id="model" aria-label="Model" disabled>
+          <option value="">loading…</option>
+        </select>
+      </div>
+
+      <div class="model-row voice-row">
+        <label for="voice">Voice</label>
+        <select id="voice" aria-label="Voice">
+          <option value="auto">auto (best per object)</option>
+        </select>
+        <button
+          type="button"
+          id="preview-voice"
+          class="preview-btn"
+          title="Play a sample of this voice"
+          aria-label="Play a sample of the selected voice">&#9654;</button>
+        <label class="switch">
+          <input type="checkbox" id="speak" checked />
+          <span>Speak</span>
+        </label>
+      </div>
+      <p class="voice-status" id="voice-status" aria-live="polite"></p>
+
+      <details class="key-box">
+        <summary>ElevenLabs API key</summary>
+        <div class="key-body">
+          <input
+            aria-label="ElevenLabs API key"
+            id="xi-key"
+            type="password"
+            placeholder="paste your xi-api-key"
+            autocomplete="off"
+            spellcheck="false" />
+          <p class="key-hint">
+            Stored only in this browser (localStorage). Sent only to
+            api.elevenlabs.io, to list voices and speak. Free plans can't use
+            library voices via the API &mdash; any your plan rejects are skipped
+            automatically.
+          </p>
+          <button type="button" id="forget-blocked" class="link-btn" hidden>
+            Forget voices blocked by my plan
+          </button>
+        </div>
+      </details>
+
+      <details class="voice-box" id="voice-box">
+        <summary>
+          Hear the voices <span class="voice-count" id="voice-count"></span>
+        </summary>
+        <div class="voice-body">
+          <p class="key-hint">
+            Tap &#9654; to play a sample, or a name to use that voice. Samples
+            come straight from ElevenLabs and don't need an API key.
+          </p>
+          <ul class="voice-list" id="voice-list" aria-live="polite"></ul>
+        </div>
+      </details>
+
+        </aside>
+      </main>
+
+      <footer>
+        <span>H4CK-O-W33N · Hacktoberfest 2026 Meetup</span>
+        <a href="https://iamsi.me/h4ck0w33n/">Back to the event</a>
+      </footer>
+    </div>
+
+    <script src="lamp.js?v=8"></script>
+  </body>
+</html>
