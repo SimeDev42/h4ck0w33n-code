@@ -6,16 +6,10 @@
 
 Open a terminal in the project root, where you can see `hack_your_lantern`.
 
-macOS / Linux:
+Windows / macOS / Linux:
 
 ```sh
 python3 -m http.server 8000 --bind 127.0.0.1
-```
-
-Windows:
-
-```powershell
-py -m http.server 8000 --bind 127.0.0.1
 ```
 
 If `py` is unavailable but Python is installed, try `python` instead. Keep the terminal open. Open **[http://localhost:8000/hack_your_lantern/](http://localhost:8000/hack_your_lantern/)** in a web browser. The folder uses underscores. Do not double-click `index.html` to open it as a `file://` URL.
